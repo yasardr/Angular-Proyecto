@@ -28,21 +28,21 @@
                                         <br>
 
                                         <!-- Datos Generales form starts -->
-                                        <form novalidate (ngSubmit)=actualizarCorporativo(formdetalle) #formdetalle="ngForm">
+                                        <form novalidate [formGroup]="formdetalle" (ngSubmit)="actualizarCorporativo()">
                                             <div class="row">
 
                                                 <div class="col-12 col-md-3">
                                                     <div class="form-group">
                                                         <div class="controls">
                                                             <label for="nombre-corto">Nombre corto</label>
-                                                            <input type="text" [ngModel]="corporativo.NombreCorto" name="nombreCorto" id="nombre-corto" class="form-control" [placeholder]="corporativo.NombreCorto" required aria-invalid="false" [disabled]="!editar">
+                                                            <input type="text" id="nombre-corto" class="form-control" [placeholder]="corporativo.NombreCorto" formControlName="nombreCorto" [class.is-invalid]="nombreCortoValido" aria-invalid="false">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="fecha-incorporacion">Fecha de incorporación *</label>
                                                         <!--Datepicker in a popup starts-->
                                                         <div class="controls input-group">
-                                                            <input class="form-control" [(ngModel)]="fecha" placeholder="{year: 2020, month: 10, day: 9}" name="fechaIncorporacion" id="fecha-incorporacion" ngbDatepicker #d2="ngbDatepicker" [disabled]="!editar">
+                                                            <input class="form-control" placeholder="2020-09-11" id="fecha-incorporacion" formControlName="fechaIncorporacion" [class.is-invalid]="fechaIncorporacionValido" ngbDatepicker #d2="ngbDatepicker">
                                                             <div class="input-group-append">
                                                                 <div class="input-group-text" (click)="d2.toggle()">
                                                                     <i class="fa fa-calendar" style="cursor: pointer;"></i>
@@ -58,13 +58,13 @@
                                                     <div class="form-group col-md-12">
                                                         <div class="controls">
                                                             <label for="nombre-completo">Nombre Completo</label>
-                                                            <input type="text" [ngModel]="corporativo.NombreCompleto" name="nombreCompleto" id="nombre-completo" class="form-control" [placeholder]="corporativo.NombreCompleto" [disabled]="!editar">
+                                                            <input type="text" formControlName="nombreCompleto" [class.is-invalid]="nombreCompletoValido" id="nombre-completo" class="form-control" [placeholder]="corporativo.NombreCompleto">
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-6">
                                                         <div class="controls">
                                                             <label for="url-sistema">Url del sistema *</label>
-                                                            <input type="text" [ngModel]="corporativo.Url" name="url" id="url-sistema" class="form-control" [placeholder]="corporativo.Url" disabled>
+                                                            <input type="text" formControlName="url" id="url-sistema" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -73,9 +73,9 @@
                                                     <div class="form-group">
                                                         <div class="controls">
                                                             <label for="status">Status *</label>
-                                                            <select [ngModel]="corporativo.Status" name="status" id="status" class="form-control" required [disabled]="!editar">
+                                                            <select formControlName="status" [class.is-invalid]="statusValido" id="status" class="form-control">
+                                                                <option value="0">Inactivo</option>
                                                                 <option value="1">Activo</option>
-                                                                <option value="3">Inactivo</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -84,13 +84,14 @@
                                                 <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
                                                     <div *ngIf="!editar">
                                                         <a class="btn btn-secondary mr-2" routerLink="/corporativos">Regresar</a>
-                                                        <button (click)=" editar = !editar " class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">Editar</button>
+                                                        <button (click)="permitirEditar()" class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">Editar</button>
                                                     </div>
                                                     <div *ngIf="editar">
-                                                        <button (click)=" editar = !editar " class="btn btn-secondary mr-2">Cancelar</button>
+                                                        <button (click)="permitirEditar()" class="btn btn-secondary mr-2">Cancelar</button>
                                                         <button type="submit" class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">Guardar Cambios</button>
                                                     </div>
                                                 </div>
+                                                <span *ngIf="mensaje" class="text-danger">Algo salio mal! Intenta nuevamente.</span>
                                             </div>
                                         </form>
                                         <!-- Datos Generales form ends -->

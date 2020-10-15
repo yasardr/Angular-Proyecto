@@ -17,21 +17,18 @@ export class CorporativosService {
                private transform: TransformDataCorporativosService ) { }
 
   getQuery( query: string ): any {
-    const url = `/api/public/${ query }`;
-
     const headers = new HttpHeaders({
       Authorization: this.auth_token
     });
 
-    return this.http.get(url, { headers });
-    // return this.http.get(`${this.apiURL}/corporativos/`, { headers });
+    return this.http.get(`${this.apiURL}${query}`, { headers });
   }
 
   /**
    * Realiza petición para retornar la lista de corporativos
    */
   getCorporativos(): Observable<any> {
-    return this.getQuery(`corporativos/`)
+    return this.getQuery(`/corporativos`)
                   .pipe( map( data => {
                     return this.transform.getDataCorporativos(data[`data`]);
                   }));
@@ -41,10 +38,21 @@ export class CorporativosService {
    * Realiza petición para retornar detalles del corporativo seleccionado
    */
   getDetalleCorporativo(id: number): Observable<any> {
-    return this.getQuery(`corporativos/${ id }`)
+    return this.getQuery(`/corporativos/${ id }`)
                   .pipe( map( data => {
                     return this.transform.getDataDetalleCorporativo(data[`data`].corporativo);
                   }));
+  }
+
+  /**
+   * Realiza una actualización del corporativo-detalle
+   */
+  setDetalleCorporativo(id: number, corporativo: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: this.auth_token
+    });
+
+    return this.http.put(`${this.apiURL}/corporativos/${ id }`, corporativo, { headers });
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { DatatableComponent, ColumnMode } from '@swimlane/ngx-datatable';
 import { CorporativosService } from '../services/corporativos.service';
 import { Corporativo } from '../models/corporativo.model';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -35,13 +36,7 @@ export class CorporativosListComponent implements OnInit {
   // private
   private tempData = [];
 
-  constructor( private corporativosService: CorporativosService ) {
-    this.corporativosService.getCorporativos()
-        .subscribe((usersListData: Corporativo[]) => {
-          this.tempData = usersListData;
-          this.rows = usersListData;
-        });
-  }
+  constructor( private activatedRoute: ActivatedRoute ) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -74,5 +69,10 @@ export class CorporativosListComponent implements OnInit {
     this.limitRef = limit.target.value;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe((data: {corporativos: Corporativo[]}) => {
+      this.rows = data.corporativos;
+      this.tempData = data.corporativos;
+    });
+  }
 }

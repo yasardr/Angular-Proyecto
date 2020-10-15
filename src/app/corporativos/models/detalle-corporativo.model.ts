@@ -4,6 +4,6 @@ export interface DetalleCorporativo {
     NombreCorto: string;
     NombreCompleto: string;
     Url: string;
-    FechaIncorporacion: string;
+    FechaIncorporacion: Object;
     Status: number;
 }

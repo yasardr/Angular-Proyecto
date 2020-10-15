@@ -1,7 +1,0 @@
-{
-    "/api/public/*": {
-        "target": "https://devschoolcloud.com",
-        "secure": false,
-        "changeOrigin": true
-    }
-}

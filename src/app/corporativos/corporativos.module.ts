@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { CorporativosRoutingModule } from './corporativos-routing.module';
 
@@ -18,6 +18,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     CommonModule,
     CorporativosRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     NgSelectModule,
     NgbModule,
     NgxDatatableModule,
