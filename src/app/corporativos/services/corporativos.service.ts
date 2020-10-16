@@ -55,4 +55,37 @@ export class CorporativosService {
     return this.http.put(`${this.apiURL}/corporativos/${ id }`, corporativo, { headers });
   }
 
+  /**
+   * Crea un contacto nuevo en el corporativo
+   */
+  crearContacto(contacto: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: this.auth_token
+    });
+
+    return this.http.post(`${this.apiURL}/contactos`, contacto, { headers });
+  }
+
+  /**
+   * Actualiza un contacto seleccionado en el corporativo
+   */
+  actualizaContacto(id: number, contacto: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: this.auth_token
+    });
+
+    return this.http.put(`${this.apiURL}/contactos/${id}`, contacto, { headers });
+  }
+
+  /**
+   * Elimina un contacto en el corporativo
+   */
+  eliminaContacto(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: this.auth_token
+    });
+
+    return this.http.delete(`${this.apiURL}/contactos/${id}`, { headers });
+  }
+
 }

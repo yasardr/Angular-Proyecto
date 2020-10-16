@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Corporativo } from '../models/corporativo.model';
 import { DetalleCorporativo } from '../models/detalle-corporativo.model';
+import { Contacto } from '../models/contacto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class TransformDataCorporativosService {
   getDataCorporativos(data: any[]): Corporativo[] {
     const corporativos = [];
 
-    if ( !data || data.length < 0) {
+    if ( !data || data.length < 1) {
       return corporativos;
     }
 
@@ -71,7 +72,8 @@ export class TransformDataCorporativosService {
       NombreCompleto: '',
       Url: '',
       FechaIncorporacion: '',
-      Status: 0
+      Status: 0,
+      Contactos: []
     };
 
     if ( !data ) {
@@ -85,10 +87,58 @@ export class TransformDataCorporativosService {
       NombreCompleto: data.S_NombreCompleto,
       Url: data.S_SystemUrl,
       FechaIncorporacion: this.getFechaIncorporacion(data.D_FechaIncorporacion),
-      Status: data.S_Activo
+      Status: data.S_Activo,
+      Contactos: this.getContactos(data.tw_contactos_corporativo)
     };
 
     return corporativo;
+  }
+
+  /**
+   * Tranforma el arreglo de contactos para visualizarlo
+   * en corporativos-detalle sección de contactos
+   */
+  private getContactos(data: any[]): Contacto[] {
+    const contactos = [];
+
+    if ( !data || data.length < 1) {
+      return contactos;
+    }
+
+    let aux: Contacto = null;
+
+    data.forEach(contacto => {
+      aux = {
+        Id: contacto.id,
+        Nombre: contacto.S_Nombre,
+        Puesto: contacto.S_Puesto,
+        Comentarios: contacto.S_Comentarios,
+        TelefonoFijo: contacto.N_TelefonoFijo,
+        TelefonoMovil: contacto.N_TelefonoMovil,
+        Email: contacto.S_Email
+      }
+      contactos.push(aux);
+    });
+
+    return contactos;
+  }
+
+  /**
+   * Tranforma el objeto que devuelve al crear un contacto
+   * para agregarlo a la tabla
+   */
+  getAgregaContacto(data: any): Contacto {
+    const aux: Contacto = {
+      Id: data.id,
+      Nombre: data.S_Nombre,
+      Puesto: data.S_Puesto,
+      Comentarios: data.S_Comentarios,
+      TelefonoFijo: data.N_TelefonoFijo,
+      TelefonoMovil: data.N_TelefonoMovil,
+      Email: data.S_Email
+    };
+
+    return aux;
   }
 
   /**
@@ -124,6 +174,34 @@ export class TransformDataCorporativosService {
     }
 
     return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Tranforma la información para crear o actualizar un contacto
+   */
+  getContacto(id: number, data: any): any {
+    const contacto = {
+      S_Nombre: this.capitalizar(data.nombre),
+      S_Puesto: this.capitalizar(data.puesto),
+      S_Comentarios: data.comentarios,
+      N_TelefonoFijo: parseInt(data.telefonoFijo, 10),
+      N_TelefonoMovil: parseInt(data.telefonoMovil, 10),
+      S_Email: data.email,
+      tw_corporativo_id: id
+  };
+
+    return contacto;
+  }
+
+  private capitalizar(value: string) {
+    value = value.toLowerCase();
+    let nombres = value.split(' ');
+
+    nombres = nombres.map( nombre => {
+      return nombre[0].toUpperCase() + nombre.substr(1);
+    });
+
+    return nombres.join(' ');
   }
 
   /**

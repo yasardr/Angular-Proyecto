@@ -42,7 +42,7 @@
                                                         <label for="fecha-incorporacion">Fecha de incorporación *</label>
                                                         <!--Datepicker in a popup starts-->
                                                         <div class="controls input-group">
-                                                            <input class="form-control" placeholder="2020-09-11" id="fecha-incorporacion" formControlName="fechaIncorporacion" [class.is-invalid]="fechaIncorporacionValido" ngbDatepicker #d2="ngbDatepicker">
+                                                            <input class="form-control" placeholder="yyyy-mm-dd" id="fecha-incorporacion" formControlName="fechaIncorporacion" [class.is-invalid]="fechaIncorporacionValido" ngbDatepicker #d2="ngbDatepicker">
                                                             <div class="input-group-append">
                                                                 <div class="input-group-text" (click)="d2.toggle()">
                                                                     <i class="fa fa-calendar" style="cursor: pointer;"></i>
@@ -100,113 +100,134 @@
                                 </ng-template>
                             </li>
 
-                            <!--******************-->
-
                             <li [ngbNavItem]="2">
                                 <a ngbNavLink class="nav-link d-flex align-items-center">
                                     <i class="ft-users mr-1"></i>
                                     <span class="d-none d-sm-block">Contactos</span>
                                 </a>
                                 <ng-template ngbNavContent>
-                                    <!-- Information content starts -->
+                                    <!-- Contactos content starts -->
                                     <div class="mt-2" id="information">
-                                        <!-- Information form starts -->
-                                        <form novalidate>
+                                        <!-- Media object starts -->
+                                        <div class="media">
+                                            <img [src]="corporativo.Logo" alt="logo" class="mr-3" height="64" width="64">
+                                            <div class="media-body">
+                                                <h4>{{corporativo.NombreCorto}}</h4>
+                                            </div>
+                                        </div>
+                                        <!-- Media object ends -->
+
+                                        <!--Small Tables Starts-->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm m-0">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th>NOMBRE</th>
+                                                                <th>PUESTO</th>
+                                                                <th>TELÉFONO</th>
+                                                                <th>CELULAR</th>
+                                                                <th>EMAIL</th>
+                                                                <th>OBSERVACIONES</th>
+                                                                <th>ACCIONES</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let contacto of contactos; let i = index">
+                                                                <td>{{ contacto.Nombre }}</td>
+                                                                <td>{{ contacto.Puesto }}</td>
+                                                                <td>{{ contacto.TelefonoFijo }}</td>
+                                                                <td>{{ contacto.TelefonoMovil }}</td>
+                                                                <td>{{ contacto.Email }}</td>
+                                                                <td>{{ contacto.Comentarios }}</td>
+                                                                <td>
+                                                                    <a (click)="llenarCampos(i)"><i class="ft-edit mr-2"></i></a>
+                                                                    <a (click)="eliminarContacto(contacto.Id, i)"><i class="ft-trash"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Small Tables Ends-->
+
+                                        <br>
+                                        <div *ngIf="contactos.length === 0" class="row justify-content-center">
+                                            <span class="text-info">No existen contactos</span>
+                                        </div>
+                                        <hr>
+                                        <br>
+
+                                        <!-- Contactos form starts -->
+                                        <form novalidate [formGroup]="formcontacto" (ngSubmit)="accionContacto()">
                                             <div class="row">
-                                                <div class="col-12 col-md-6 mb-3 mb-md-0">
-                                                    <h4 class="mb-3"><i class="ft-link mr-2"></i>Social Links</h4>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-twitter">Twitter</label>
-                                                        <input type="text" id="users-edit-twitter" class="form-control" value="https://www.twitter.com/">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-facebook">Facebook</label>
-                                                        <input type="text" id="users-edit-facebook" class="form-control" value="https://www.facebook.com/">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-google">Google+</label>
-                                                        <input type="text" id="users-edit-google" class="form-control">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-linkedin">LinkedIn</label>
-                                                        <input type="text" id="users-edit-linkedin" class="form-control">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-instagram">Instagram</label>
-                                                        <input type="text" id="users-edit-instagram" class="form-control" value="https://www.instagram.com/">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 col-md-6 mb-2 mb-md-0">
-                                                    <h4 class="mb-3"><i class="ft-user mr-2"></i>Personal Info</h4>
-                                                    <div class="form-group">
-                                                        <div class="controls position-relative">
-                                                            <label for="users-edit-bday">Birth date</label>
-                                                            <input type="text" id="users-edit-bday" class="form-control birthdate-picker" required placeholder="Birth date">
-                                                        </div>
-                                                    </div>
+                                                <div class="col-3">
                                                     <div class="form-group">
                                                         <div class="controls">
-                                                            <label for="users-edit-country">Country</label>
-                                                            <select id="users-edit-country" class="form-control" required>
-                                                                <option value="">Select Country</option>
-                                                                <option value="USA">USA</option>
-                                                                <option value="UK">UK</option>
-                                                                <option value="India">India</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-languages">Languages</label>
-                                                        <ng-select [multiple]="true" [(ngModel)]="selectedLanguages" [ngModelOptions]="{standalone: true}">
-                                                            <ng-option *ngFor="let language of languages" [value]="language.value">{{language.name}}
-                                                            </ng-option>
-                                                        </ng-select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="controls">
-                                                            <label for="users-edit-phone">Phone</label>
-                                                            <input type="text" id="users-edit-phone" class="form-control" placeholder="Phone Number" required value="(+656) 254 2568">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="controls">
-                                                            <label for="users-edit-address">Address</label>
-                                                            <input type="text" id="users-edit-address" class="form-control" placeholder="Address" required>
+                                                            <label for="nombre">NOMBRE</label>
+                                                            <input type="text" formControlName="nombre" [class.is-invalid]="nombreValido" id="nombre" class="form-control">
+                                                            <div *ngIf="nombreValido" class="font-small-1 text-danger">Requerido</div>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-12">
+                                                <div class="col-3">
                                                     <div class="form-group">
-                                                        <label for="users-edit-website">Website</label>
-                                                        <input type="text" id="users-edit-website" class="form-control" placeholder="Website Address">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-music">Favourite Music</label>
-                                                        <ng-select [multiple]="true" [(ngModel)]="selectedMusic" [ngModelOptions]="{standalone: true}">
-                                                            <ng-option *ngFor="let m of music" [value]="m.value">{{m.name}}
-                                                            </ng-option>
-                                                        </ng-select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="users-edit-movies">Favourite Movies</label>
-                                                        <ng-select [multiple]="true" [(ngModel)]="selectedMovies" [ngModelOptions]="{standalone: true}">
-                                                            <ng-option *ngFor="let movie of movies" [value]="movie.value">{{movie.name}}
-                                                            </ng-option>
-                                                        </ng-select>
+                                                        <div class="controls">
+                                                            <label for="puesto">PUESTO</label>
+                                                            <input type="text" formControlName="puesto" [class.is-invalid]="puestoValido" id="puesto" class="form-control">
+                                                            <div *ngIf="puestoValido" class="font-small-1 text-danger">Requerido</div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="comentarios">COMENTARIOS</label>
+                                                            <input type="text" formControlName="comentarios" [class.is-invalid]="comentariosValido" id="comentarios" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                                <div class="col-12 d-flex justify-content-end flex-sm-row flex-column mt-3 mt-sm-0">
-                                                    <button type="submit" class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">Save Changes</button>
-                                                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="telefono-fijo">TELÉFONO FIJO</label>
+                                                            <input type="text" formControlName="telefonoFijo" [class.is-invalid]="telefonoFijoValido" id="telefono-fijo" class="form-control">
+                                                            <div *ngIf="telefonoFijoValido" class="font-small-1 text-danger">Ingrese un número de 10 digitos</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="telefono-movil">TELÉFONO MÓVIL</label>
+                                                            <input type="text" formControlName="telefonoMovil" [class.is-invalid]="telefonoMovilValido" id="telefono-movil" class="form-control">
+                                                            <div *ngIf="telefonoMovilValido" class="font-small-1 text-danger">Ingrese un número de 10 digitos</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label for="email">EMAIL</label>
+                                                            <input type="text" formControlName="email" [class.is-invalid]="emailValido" id="email" class="form-control">
+                                                            <span *ngIf="emailValido" class="font-small-1 text-danger">Ingresa un correo valido</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3 mt-4">
+                                                    <button *ngIf="!actualizar" type="submit" class="btn btn-sm btn-secondary">AGREGAR CONTACTO</button>
+                                                    <button *ngIf="actualizar" type="submit" class="btn btn-sm btn-secondary">ACTUALIZAR CONTACTO</button>
                                                 </div>
                                             </div>
                                         </form>
-                                        <!-- Information form ends -->
+                                        <!-- Contactos form ends -->
                                     </div>
-                                    <!-- Information content ends -->
+                                    <!-- Contactos content ends -->
                                 </ng-template>
                             </li>
                         </ul>
