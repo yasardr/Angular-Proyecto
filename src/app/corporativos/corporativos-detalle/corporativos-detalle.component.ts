@@ -155,6 +155,7 @@ export class CorporativosDetalleComponent implements OnInit {
 
     if (!this.mensaje) {
       this.editar = !this.editar;
+      this.corporativo.NombreCorto = this.formdetalle.value.nombreCorto;
       this.formdetalle.disable();
     }
   }
